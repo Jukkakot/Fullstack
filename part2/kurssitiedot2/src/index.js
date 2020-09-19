@@ -24,13 +24,13 @@ const Content = (props) => {
 }
 
 const Total = (props) => {
-  var partTotal = 0
-  for(var count of props.course.parts){
-    partTotal += count.exercises
-  }
+  let sum = props.course.parts.reduce(function (total, currentValue) {
+    return total + currentValue.exercises;
+  },0);
+
     return (
         <div>
-        <p><b>Total of {partTotal} exercises</b></p>
+        <p><b>Total of {sum} exercises</b></p>
         </div>
     )
 }
