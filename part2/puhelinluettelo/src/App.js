@@ -23,7 +23,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>filter shown with <input value={filter} onChange={handleFilterChange} /></div>
+      <div>filter shown with <input  onChange={handleFilterChange} /></div>
       <h2>add a new</h2>
       <form onSubmit ={ event =>{
             event.preventDefault()
@@ -41,14 +41,14 @@ const App = () => {
             
           }
           }>
-        <div> name: <input value = {newName} onChange ={handleNameChange}/> </div>
-        <div> number: <input value= {newNumber} onChange= {handleNumberChange}/></div>
+        <div> name: <input onChange ={handleNameChange}/> </div>
+        <div> number: <input  onChange= {handleNumberChange}/></div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.filter(function (person) { return person.name.toLowerCase().startsWith(filter.toLowerCase())})
+      {persons.filter(function (person) { return person.name.toLowerCase().includes(filter.toLowerCase())})
       .map(person => 
           <p key={person.name}>{person.name} {person.number}</p> 
         )} 
