@@ -14,10 +14,16 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit ={ event =>{
             event.preventDefault()
-            const copy = [...persons]
-            copy.push({name: newName})
-            setPersons(copy)
-            setNewName("")
+            if(!persons.some(person => person.name === newName)){
+              const copy = [...persons]
+              copy.push({name: newName})
+              setPersons(copy)
+              setNewName("")
+            } else {
+              alert (`${newName} is already added to phonebook`)
+              setNewName("")
+            }
+            
           }
           }>
         <div>
