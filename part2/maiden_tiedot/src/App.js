@@ -17,8 +17,9 @@ const Country = (props) => {
       ) 
   )
 }
+
 const Result = (props) => {
-  const filtered = props.countries.filter(function (country) { return country.name.toLowerCase().startsWith(props.keyWord.toLowerCase())})
+  const filtered = props.countries.filter(function (country) { return country.name.toLowerCase().includes(props.keyWord.toLowerCase())})
   if(filtered.length === 1){
     return (
       <Country filtered={filtered}></Country>
@@ -28,8 +29,7 @@ const Result = (props) => {
     return(
       filtered.map(country => 
         <div>
-        <p key={country.name}>{country.name}</p> 
-        
+        <p key={country.name}>{country.name} <button value ={country.name} onClick={function (e) {props.setKeyWord(e.target.value)}}>show</button></p> 
         </div>)
     )
   }
@@ -37,6 +37,7 @@ const Result = (props) => {
       <p>Too many matches, specify another filter</p>
     )
 }
+
 function App() {
   const [keyWord, setKeyWord] = useState("")
   const [countries, setCountries] = useState([])
@@ -56,7 +57,7 @@ function App() {
     <div >
       find countries <input value = {keyWord} onChange={handleKeyWordChange}></input>
       
-      <Result countries ={countries} keyWord ={keyWord}/>
+      <Result countries ={countries} keyWord ={keyWord} setKeyWord={setKeyWord}  />
    
     </div>
   );
