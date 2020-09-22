@@ -1,21 +1,45 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+
+const api_key = process.env.REACT_APP_API_KEY
+
 const Country = (props) => {
-  return (
-    props.filtered.map(country => 
-      <div>
-      <h1 key={country.name}>{country.name} </h1>
-      <p>capital {country.capital}</p>
-      <p>population {country.population}</p>
-      <h2>languages</h2>
-      <ul>
-        {country.languages.map(language =>
-        <li key ={language.name}>{language.name}</li>)}
-        </ul>
-      <img src ={country.flag } width="200" alt={country.name}></img>
-      </div>
-      ) 
-  )
+  const [isLoading, setLoading] = useState(true)
+  const [capital, setCapital] = useState([])
+
+  useEffect(() => {
+  axios
+      .get('http://api.weatherstack.com/current?access_key='+api_key+'&query='+props.filtered[0].capital)
+      .then(response => {
+        setCapital(response.data)
+        setLoading(false)
+      })
+    }, [])
+
+    if (isLoading){
+      return <div> Loading data....</div>
+    }
+
+    return (
+      props.filtered.map(country => 
+        <div>
+        <h1 key={country.name}>{country.name} </h1>
+        <p>capital {country.capital}</p>
+        <p>population {country.population}</p>
+        <h2>languages</h2>
+        <ul>
+          {country.languages.map(language =>
+          <li key ={language.name}>{language.name}</li>)}
+          </ul>
+        <img src ={country.flag } width="200" alt={country.name}></img>
+        <h2><b>Weather in {capital.location.name}</b></h2>
+        <p><b>temperature:</b> {capital.current.temperature} celcius</p>
+        <img src ={capital.current.weather_icons} width="80" alt={country.name}></img>
+        <p><b>wind: </b>{capital.current.wind_speed} mph direction {capital.current.wind_dir}</p>
+        </div>
+        ) 
+    )
+
 }
 
 const Result = (props) => {
