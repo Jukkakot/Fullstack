@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 
 
+
+
 const Persons = (props)=> {
+  
   return(
     props.persons.filter(function (person) { return person.name.toLowerCase().includes(props.filter.toLowerCase())}).map(person => 
-      <p key={person.name}>{person.name} {person.number}</p> 
+      <p key={person.name}>{person.name} {person.number} <button onClick ={(event)=>props.removePerson(event,person)}>delete</button></p> 
     )
   )
 }
@@ -29,15 +32,21 @@ const App = (props) => {
   const [newName, setNewName ] = useState("")
   const [newNumber,setNewNumber] = useState("");
   const [filter, setNewFilter] = useState("");
-  /*
-  useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
-  }, [])
-  */
+
+  const removePerson = (event,person) => {
+  // event.preventDefault()
+    if(window.confirm("Delete "+person.name+" ?")){
+      const copy = [...persons]
+      personService
+        .remove(person.id)
+        .then(response => 
+          {
+           copy.splice(copy.indexOf(person), 1);
+           setPersons(copy)
+        })
+    }
+  }
+
  useEffect(() => {
   personService
     .getAll()
@@ -59,7 +68,6 @@ const App = (props) => {
   const onSubmit = event =>{
     event.preventDefault()
     if(!persons.some(person => person.name === newName)){
-      const copy = [...persons]
       const personObject = {
         name: newName,
         number: newNumber
@@ -67,13 +75,19 @@ const App = (props) => {
       personService
       .create(personObject)
       .then(response => {
-        copy.push(personObject)
-        setPersons(copy)
+        personService
+        .getAll()
+        .then(response => {
+          setPersons(response.data)
+        })
         setNewName("")
         setNewNumber("")
       })
+      
     } else {
-      alert (`${newName} is already added to phonebook`)
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)){
+        
+      }
       setNewName("")
       setNewNumber("")
     } 
@@ -91,7 +105,7 @@ const App = (props) => {
                   newName = {newName}
                   onSubmit ={onSubmit}/>
       <h2>Numbers</h2>
-      <Persons persons ={persons} filter ={filter} />
+      <Persons persons ={persons} filter ={filter} removePerson={removePerson} />
     </div>
   )
 
