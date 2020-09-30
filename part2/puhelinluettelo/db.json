@@ -1,16 +1,6 @@
 {
   "persons": [
     {
-      "name": "hevonen",
-      "number": "123",
-      "id": 3
-    },
-    {
-      "name": "jukka",
-      "number": "123",
-      "id": 4
-    },
-    {
       "name": "manu",
       "number": "123",
       "id": 5

@@ -36,12 +36,25 @@ const Notification = ({ message }) => {
     </div>
   )
 }
+
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
 const App = (props) => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName ] = useState("")
   const [newNumber,setNewNumber] = useState("");
   const [filter, setNewFilter] = useState("");
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const removePerson = (event,person) => {
   // event.preventDefault()
@@ -117,6 +130,12 @@ const App = (props) => {
           }, 3000)
           })
         })
+        .catch(error => {
+          setErrorMessage("Error when updating "+person.name+" number")
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
+        })
       }
       
     } 
@@ -130,6 +149,7 @@ const App = (props) => {
       <h2>Phonebook</h2>
       <Filter filter= {filter} handleFilterChange ={handleFilterChange}/>
       <Notification message={notificationMessage} />
+      <ErrorNotification message={errorMessage} />
       <h2>add a new</h2>
       <PersonForm handleNameChange={handleNameChange}
                   handleNumberChange={handleNumberChange}
