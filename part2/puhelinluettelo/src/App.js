@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
-
-
-
-
+import './App.css'
 const Persons = (props)=> {
   
   return(
@@ -27,11 +24,24 @@ const PersonForm = (props) =>  {
     </form>
   )
 }
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="notification">
+      {message}
+    </div>
+  )
+}
 const App = (props) => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName ] = useState("")
   const [newNumber,setNewNumber] = useState("");
   const [filter, setNewFilter] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   const removePerson = (event,person) => {
   // event.preventDefault()
@@ -43,6 +53,11 @@ const App = (props) => {
           {
            copy.splice(copy.indexOf(person), 1);
            setPersons(copy)
+
+           setNotificationMessage(person.name+ " was removed")
+           setTimeout(() => {
+            setNotificationMessage(null)
+          }, 3000)
         })
     }
   }
@@ -79,6 +94,10 @@ const App = (props) => {
         .getAll()
         .then(response => {
           setPersons(response.data)
+          setNotificationMessage(newName+ " was added")
+           setTimeout(() => {
+            setNotificationMessage(null)
+          }, 3000)
         })
       })
     } else {
@@ -92,6 +111,10 @@ const App = (props) => {
           .getAll()
           .then(response => {
             setPersons(response.data)
+            setNotificationMessage(person.name+ "'s number was changed")
+           setTimeout(() => {
+            setNotificationMessage(null)
+          }, 3000)
           })
         })
       }
@@ -106,6 +129,7 @@ const App = (props) => {
     <div>
       <h2>Phonebook</h2>
       <Filter filter= {filter} handleFilterChange ={handleFilterChange}/>
+      <Notification message={notificationMessage} />
       <h2>add a new</h2>
       <PersonForm handleNameChange={handleNameChange}
                   handleNumberChange={handleNumberChange}
