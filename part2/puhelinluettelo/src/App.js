@@ -80,17 +80,25 @@ const App = (props) => {
         .then(response => {
           setPersons(response.data)
         })
-        setNewName("")
-        setNewNumber("")
       })
-      
     } else {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)){
-        
+        const person = persons.find(person => person.name === newName)
+        person.number = newNumber
+        personService
+        .update(person.id,person)
+        .then(response=> {
+          personService
+          .getAll()
+          .then(response => {
+            setPersons(response.data)
+          })
+        })
       }
-      setNewName("")
-      setNewNumber("")
+      
     } 
+    setNewName("")
+    setNewNumber("")
   }
   
   
