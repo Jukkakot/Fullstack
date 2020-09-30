@@ -52,10 +52,20 @@ const App = (props) => {
     event.preventDefault()
     if(!persons.some(person => person.name === newName)){
       const copy = [...persons]
-      copy.push({name: newName, number: newNumber})
+      const personObject = {
+        name: newName,
+        number: newNumber
+      }
+      copy.push(personObject)
       setPersons(copy)
       setNewName("")
       setNewNumber("")
+
+      axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        console.log(response)
+      })
     } else {
       alert (`${newName} is already added to phonebook`)
       setNewName("")
