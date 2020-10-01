@@ -5,7 +5,7 @@ const Persons = (props)=> {
   
   return(
     props.persons.filter(function (person) { return person.name.toLowerCase().includes(props.filter.toLowerCase())}).map(person => 
-      <p key={person.name}>{person.id} {person.name} {person.number} <button onClick ={(event)=>props.removePerson(event,person)}>delete</button></p> 
+      <p key={person.name}>{person.name} {person.number} <button onClick ={(event)=>props.removePerson(event,person)}>delete</button></p> 
     )
   )
 }
