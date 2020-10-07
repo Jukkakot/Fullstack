@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 import './App.css'
@@ -10,32 +11,26 @@ const Persons = (props) => {
 }
 
 const Filter = (props) => {
-  if(props.handleFilterChange){
-    return (
-      <div>filter shown with <input  onChange={props.handleFilterChange} /></div>
-    )
-  } else {
-    return
-  }
+
+  return (
+    <div>filter shown with <input  onChange={props.handleFilterChange} /></div>
+  )
+
 }
 const PersonForm = (props) =>  {
-  if(props.onSubmit &&
-     props.newName &&
-     props.newNumber &&
-     props.handleNameChange &&
-     props.handleNumberChange){
-    return (
-      <form onSubmit ={props.onSubmit}>
-        <div> name: <input value ={props.newName} onChange ={props.handleNameChange}/> </div>
-        <div> number: <input value ={props.newNumber} onChange= {props.handleNumberChange}/></div>
-        <div><button type="submit">add</button></div>
-      </form>
-    )
-  } else return
+  const { onSubmit,newName,newNumber,handleNameChange,handleNumberChange } = props
+  return (
+    <form onSubmit ={onSubmit}>
+      <div> name: <input value ={newName} onChange ={handleNameChange}/> </div>
+      <div> number: <input value ={newNumber} onChange= {handleNumberChange}/></div>
+      <div><button type="submit">add</button></div>
+    </form>
+  )
+
 
 }
 
-const Notification = ( message) => {
+const Notification = ( { message }) => {
   if (message === null) {
     return null
   }
@@ -47,7 +42,7 @@ const Notification = ( message) => {
   )
 }
 
-const ErrorNotification = (message) => {
+const ErrorNotification = ({ message } ) => {
   if (message === null) {
     return null
   }
