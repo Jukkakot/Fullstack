@@ -103,35 +103,31 @@ const App = (props) => {
       personService
       .create(personObject)
       .then(response => {
-        personService
-        .getAll()
-        .then(response => {
-          setPersons(response.data)
-          setNotificationMessage(newName+ " was added")
+        const copy = [...persons]
+        copy.push(response.data)
+        setPersons(copy)
+        setNotificationMessage(newName+ " was added")
            setTimeout(() => {
             setNotificationMessage(null)
           }, 3000)
-        })
       })
     } else {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)){
-        const person = persons.find(person => person.name === newName)
-        person.number = newNumber
+        const personCopy = {...persons.find(person => person.name === newName)}
+        personCopy.number = newNumber
         personService
-        .update(person.id,person)
-        .then(response=> {
-          personService
-          .getAll()
-          .then(response => {
-            setPersons(response.data)
-            setNotificationMessage(person.name+ "'s number was changed")
+        .update(personCopy.id,personCopy)
+        .then(response => {
+          const copy = [...persons]
+          copy[copy.findIndex(person=>person.id===response.data.id)] = response.data
+          setPersons(copy)
+          setNotificationMessage(personCopy.name+ "'s number was changed")
            setTimeout(() => {
             setNotificationMessage(null)
           }, 3000)
-          })
         })
         .catch(error => {
-          setErrorMessage("Error when updating "+person.name+" number")
+          setErrorMessage("Error when updating "+personCopy.name+" number")
           setTimeout(() => {
             setErrorMessage(null)
           }, 3000)
