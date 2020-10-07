@@ -57,7 +57,7 @@ const App = (props) => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   const removePerson = (event,person) => {
-  // event.preventDefault()
+    event.preventDefault()
     if(window.confirm("Delete "+person.name+" ?")){
       const copy = [...persons]
       personService
