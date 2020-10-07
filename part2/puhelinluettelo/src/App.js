@@ -111,6 +111,13 @@ const App = (props) => {
             setNotificationMessage(null)
           }, 3000)
       })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
+          
+      })
     } else {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)){
         const personCopy = {...persons.find(person => person.name === newName)}
