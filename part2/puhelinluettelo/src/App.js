@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 import './App.css'
 const Persons = (props) => {
-
   return(
     props.persons.filter(function (person) { return person.name.toLowerCase().includes(props.filter.toLowerCase())}).map(person =>
       <p key={person.name}>{person.name} {person.number} <button onClick ={(event) => props.removePerson(event,person)}>delete</button></p>
@@ -62,8 +61,8 @@ const ErrorNotification = (message) => {
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName ] = useState("")
-  const [newNumber,setNewNumber] = useState("");
-  const [filter, setNewFilter] = useState("");
+  const [newNumber,setNewNumber] = useState("")
+  const [filter, setNewFilter] = useState("")
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -75,7 +74,7 @@ const App = () => {
         .remove(person.id)
         .then(() =>
         {
-          copy.splice(copy.indexOf(person), 1);
+          copy.splice(copy.indexOf(person), 1)
           setPersons(copy)
 
           setNotificationMessage(person.name+ " was removed")
