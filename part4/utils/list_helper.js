@@ -55,9 +55,31 @@ const mostBlogs = (blogs) => {
     blogs: maxCount
   }
 }
+
+const mostLikes = (blogs) => {
+  if(blogs.length === 0){
+    return {}
+  }
+  const uniqnames = _.uniq(_.map(blogs, "author"))
+  var maxName = ""
+  var maxLikesCount = 0
+  _.forEach(uniqnames, name => {
+      filteredBlogs = _.filter(blogs, blog=>blog.author === name)
+      likesSum= _.sumBy(filteredBlogs, blog=>blog.likes)
+      if (likesSum > maxLikesCount) {
+        maxLikesCount = likesSum
+        maxName = name
+      }
+  })
+  return {
+    author: maxName,
+    likes: maxLikesCount
+  }
+}
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
