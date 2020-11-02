@@ -10,7 +10,28 @@ const totalLikes = (blogs) => {
   })
   return result
 }
+const favouriteBlog = (blogs) => {
+  var maxIndex = -1
+  var maxLikes = 0
+  blogs.map((blog, index) => {
+    if (blog.likes > maxLikes) {
+      maxLikes = blog.likes
+      maxIndex = index
+    }
+  })
+  if (maxIndex != -1) {
+    const favouriteBlog = {
+      title:blogs[maxIndex].title,
+      author:blogs[maxIndex].author,
+      likes:blogs[maxIndex].likes
+    }
+    return favouriteBlog
+  } else {
+    return []
+  }
+}
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favouriteBlog
 }
