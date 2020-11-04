@@ -42,12 +42,10 @@ test('a specific blog is within the returned blogs', async () => {
 
 test('a valid blog can be added ', async () => {
     const newBlog = {
-       
         title: "This is new title",
         author: "Michael Chan",
         url: "https://reactpatterns.com/",
         likes: 7,
-   
     }
 
     await api
