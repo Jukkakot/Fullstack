@@ -1,34 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
+import Persons from "./components/Persons"
+import Filter from "./components/Filter"
+import PersonForm from "./components/PersonForm"
 import './App.css'
-const Persons = (props) => {
-  return(
-    props.persons.filter(function (person) { return person.name.toLowerCase().includes(props.filter.toLowerCase())}).map(person =>
-      <p key={person.name}>{person.name} {person.number} <button onClick ={(event) => props.removePerson(event,person)}>delete</button></p>
-    )
-  )
-}
-
-const Filter = (props) => {
-
-  return (
-    <div>filter shown with <input  onChange={props.handleFilterChange} /></div>
-  )
-
-}
-const PersonForm = (props) =>  {
-  const { onSubmit,newName,newNumber,handleNameChange,handleNumberChange } = props
-  return (
-    <form onSubmit ={onSubmit}>
-      <div> name: <input value ={newName} onChange ={handleNameChange}/> </div>
-      <div> number: <input value ={newNumber} onChange= {handleNumberChange}/></div>
-      <div><button type="submit">add</button></div>
-    </form>
-  )
-
-
-}
 
 const Notification = ( { message }) => {
   if (message === null) {
