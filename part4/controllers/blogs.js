@@ -15,10 +15,19 @@ blogsRouter.post('/', async (request, response, next) => {
     url: body.url,
     likes:body.likes === undefined ? 0 : body.likes,
   })
+ 
   try { 
     const savedBlog = await blog.save()
     response.status(201).json(savedBlog.toJSON())
   } catch(exception) {
+    next(exception)
+  }
+})
+blogsRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  } catch (exception) {
     next(exception)
   }
 })
