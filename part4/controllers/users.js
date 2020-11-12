@@ -19,7 +19,7 @@ usersRouter.post('/', async (request, response,next) => {
     name: body.name,
     passwordHash,
   })
-  
+
   try{
     const savedUser = await user.save()
     response.json(savedUser)
@@ -30,7 +30,10 @@ usersRouter.post('/', async (request, response,next) => {
 })
 
 usersRouter.get('/', async (request, response) => {
-    const users = await User.find({})
+    const users = await User
+    .find({}).populate('blogs')
+
+  //  const users = await User.find({})
     response.json(users.map(u => u.toJSON()))
   })
 module.exports = usersRouter
