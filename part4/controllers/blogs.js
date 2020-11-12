@@ -13,13 +13,13 @@ blogsRouter.post('/', async (request, response, next) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes:body.likes === undefined ? 0 : body.likes,
+    likes: body.likes === undefined ? 0 : body.likes,
   })
- 
-  try { 
+
+  try {
     const savedBlog = await blog.save()
     response.status(201).json(savedBlog.toJSON())
-  } catch(exception) {
+  } catch (exception) {
     next(exception)
   }
 })
@@ -31,5 +31,31 @@ blogsRouter.delete('/:id', async (request, response, next) => {
     next(exception)
   }
 })
+blogsRouter.put('/:id', async (request, response, next) => {
+  const body = request.body
+  const id = request.params.id
+
+  if (Object.keys(body).length === 0) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+  
+
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+  }
+  try {
+    await Blog.findByIdAndUpdate(id, blog)
+    response.status(201).end()
+  } catch (error) {
+    next(error)
+  }
+
+})
+
 
 module.exports = blogsRouter
