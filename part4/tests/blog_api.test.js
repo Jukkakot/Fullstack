@@ -174,6 +174,20 @@ test('blog without title and url is not added', async () => {
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
+test('gives error if no token is given', async () => {
+    const newBlog = {
+        title: "This is new title",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 7,
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+})
+
 afterAll(async () => {
     await api.delete("/api/users")
     mongoose.connection.close()
