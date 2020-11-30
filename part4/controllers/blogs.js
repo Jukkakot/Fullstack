@@ -67,8 +67,6 @@ blogsRouter.put('/:id', async (request, response, next) => {
       error: 'content missing'
     })
   }
-
-
   const blog = {
     title: body.title,
     author: body.author,
