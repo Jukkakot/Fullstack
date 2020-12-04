@@ -121,9 +121,9 @@ const App = () => {
     try {
       const copyObject = blogObject
       copyObject.likes++
-      const likedBlog = await blogService.update(copyObject.id,copyObject)
+      const likedBlog = await blogService.update(copyObject.id, copyObject)
       const copyBlogs = [...blogs]
-      copyBlogs.splice(copyBlogs.indexOf(blogObject),likedBlog)
+      copyBlogs.splice(copyBlogs.indexOf(blogObject), likedBlog)
       setBlogs(copyBlogs)
 
       setNotificationMessage("Blog " + likedBlog.title + " by " + likedBlog.author + " updated")
@@ -141,7 +141,7 @@ const App = () => {
     try {
       await blogService.remove(blogObject.id)
       const copyBlogs = [...blogs]
-      copyBlogs.splice(copyBlogs.indexOf(blogObject),1)
+      copyBlogs.splice(copyBlogs.indexOf(blogObject), 1)
       setBlogs(copyBlogs)
 
       setNotificationMessage("Blog " + blogObject.title + " by " + blogObject.author + " deleted")
@@ -165,10 +165,10 @@ const App = () => {
         <div>
           <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
           <Togglable buttonLabel="New Blog" ref={noteFormRef}>
-            <BlogForm createBlog = {createBlog}></BlogForm>
+            <BlogForm createBlog={createBlog}></BlogForm>
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} user ={user} delBlog ={delBlog} likeABlog = {likeABlog} />
+            <Blog key={blog.id} blog={blog} user={user} delBlog={delBlog} likeABlog={likeABlog} />
           )}
         </div>
       }
