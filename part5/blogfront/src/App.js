@@ -17,8 +17,11 @@ const App = () => {
   useEffect(async () => {
     // const userBlogs = await userService.getBlogs(user)
     //   setBlogs(userBlogs)
-    const blogs = await blogService.getAll()
-    setBlogs(blogs)
+    const foundBlogs = await blogService.getAll()
+    foundBlogs.sort(function (a, b) {
+      return b.likes - a.likes;
+    });
+    setBlogs(foundBlogs)
   }, [])
 
   useEffect(() => {
@@ -134,7 +137,24 @@ const App = () => {
       }, 5000)
     }
   }
-  
+  const delBlog = async (blogObject) => {
+    try {
+      await blogService.remove(blogObject.id)
+      const copyBlogs = [...blogs]
+      copyBlogs.splice(copyBlogs.indexOf(blogObject),1)
+      setBlogs(copyBlogs)
+
+      setNotificationMessage("Blog " + blogObject.title + " by " + blogObject.author + " deleted")
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (error) {
+      setNotificationMessage('error deleting a blog')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    }
+  }
   return (
     <div>
       <h2>blogs</h2>
@@ -148,7 +168,7 @@ const App = () => {
             <BlogForm createBlog = {createBlog}></BlogForm>
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} likeABlog = {likeABlog} />
+            <Blog key={blog.id} blog={blog} user ={user} delBlog ={delBlog} likeABlog = {likeABlog} />
           )}
         </div>
       }

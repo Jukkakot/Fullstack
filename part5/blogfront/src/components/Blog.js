@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog,likeABlog }) => {
+const Blog = ({ blog,user,likeABlog,delBlog }) => {
   const [visible, setVisible] = useState(false)
   const [bText, setBText] = useState("View")
   const blogStyle = {
@@ -23,6 +23,14 @@ const Blog = ({ blog,likeABlog }) => {
     event.preventDefault()
     likeABlog(blog)
   }
+  const handleDelBlog = (event) => {
+    event.preventDefault()
+    
+    if(window.confirm("Remove "+blog.title+" by "+blog.author)){
+      delBlog(blog)
+    }
+  }
+  
   return (
     <div style={blogStyle}  >
       <div>
@@ -32,6 +40,7 @@ const Blog = ({ blog,likeABlog }) => {
         <p>{blog.url} </p>
         <p>likes {blog.likes} <button onClick={handleLikeBlog}>like</button></p>
         <p>{blog.user ? blog.user.username : "null"} </p>
+        {blog.user && user.username === blog.user.username ? <button onClick={handleDelBlog}>remove</button>: ""}
       </div>
     </div>
   )
