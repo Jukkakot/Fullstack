@@ -6,6 +6,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 // import userService from './services/users'
 import "./App.css"
+import PropTypes from 'prop-types'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const noteFormRef = useRef()
@@ -33,16 +34,19 @@ const App = () => {
 
     }
   }, [])
+
   const Notification = ({ message }) => {
     if (message === null) {
       return null
     }
-
     return (
       <div className="notification">
         {message}
       </div>
     )
+  }
+  Notification.propTypes = {
+    message: PropTypes.string
   }
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -77,7 +81,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -86,7 +90,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"

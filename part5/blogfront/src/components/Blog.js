@@ -26,12 +26,12 @@ const Blog = ({ blog,user,likeABlog,delBlog }) => {
   }
   const handleDelBlog = (event) => {
     event.preventDefault()
-    
+
     if(window.confirm("Remove "+blog.title+" by "+blog.author)){
       delBlog(blog)
     }
   }
-  
+
   return (
     <div style={blogStyle}  >
       <div>
