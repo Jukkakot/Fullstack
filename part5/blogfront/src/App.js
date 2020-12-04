@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import BlogForm from "./components/BlogForm"
+import Togglable from "./components/Togglable"
 import blogService from './services/blogs'
 import loginService from './services/login'
-import userService from './services/users'
+// import userService from './services/users'
 import "./App.css"
 const App = () => {
   const [blogs, setBlogs] = useState([])
-
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
-  const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const noteFormRef = useRef()
+  const [notificationMessage, setNotificationMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -21,7 +19,7 @@ const App = () => {
     //   setBlogs(userBlogs)
     const blogs = await blogService.getAll()
     setBlogs(blogs)
-  }, [blogs])
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -29,7 +27,7 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
-      
+
     }
   }, [])
   const Notification = ({ message }) => {
@@ -61,9 +59,9 @@ const App = () => {
       // const userBlogs = await userService.getBlogs(user)
       // setBlogs(userBlogs)
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setNotificationMessage('wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotificationMessage(null)
       }, 5000)
     }
   }
@@ -95,77 +93,66 @@ const App = () => {
       <button type="submit">login</button>
     </form>
   )
-  const addBlog = async (event) => {
-    event.preventDefault()
+  const createBlog = async (blogObject) => {
     try {
-      const blog = {
-        user:user,
-        title:newBlogTitle,
-        author:newBlogAuthor,
-        url:newBlogUrl
-      }
-      const newBlog = await blogService.create(blog)
-      // const copyBlogs = [...blogs]
-      // copyBlogs.push(newBlog)
-      // setBlogs(copyBlogs)
+      blogObject.user = user
+      const newBlog = await blogService.create(blogObject)
+      const copyBlogs = [...blogs]
+      copyBlogs.push(newBlog)
+      setBlogs(copyBlogs)
 
-      setNewBlogAuthor("")
-      setNewBlogTitle("")
-      setNewBlogUrl("")
-      setErrorMessage("a new blog "+newBlogTitle+" by "+newBlogAuthor+" added")
+      noteFormRef.current.toggleVisibility()
+
+      setNotificationMessage("a new blog " + newBlog.title + " by " + newBlog.author + " added")
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotificationMessage(null)
       }, 5000)
-    } catch (exception) {
-      setErrorMessage('error creating blog')
+    } catch (error) {
+      setNotificationMessage('error creating blog')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotificationMessage(null)
       }, 5000)
     }
-
   }
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title:
-      <input
-          value={newBlogTitle}
-          onChange={t => setNewBlogTitle(t.target.value)}
-        />
-      </div>
-      <div>
-        author:
-      <input
-          value={newBlogAuthor}
-          onChange={t => setNewBlogAuthor(t.target.value)}
-        />
-      </div>
-      <div>
-        url:
-      <input
-          value={newBlogUrl}
-          onChange={t => setNewBlogUrl(t.target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
-  )
+  const likeABlog = async (blogObject) => {
+    try {
+      const copyObject = blogObject
+      copyObject.likes++
+      const likedBlog = await blogService.update(copyObject.id,copyObject)
+      const copyBlogs = [...blogs]
+      copyBlogs.splice(copyBlogs.indexOf(blogObject),likedBlog)
+      setBlogs(copyBlogs)
 
+      setNotificationMessage("Blog " + likedBlog.title + " by " + likedBlog.author + " updated")
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (error) {
+      setNotificationMessage('error liking a blog')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    }
+  }
+  
   return (
     <div>
       <h2>blogs</h2>
 
-      <Notification message={errorMessage} />
+      <Notification message={notificationMessage} />
       {user === null ?
         loginForm() :
         <div>
           <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-          {blogForm()}
+          <Togglable buttonLabel="New Blog" ref={noteFormRef}>
+            <BlogForm createBlog = {createBlog}></BlogForm>
+          </Togglable>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} likeABlog = {likeABlog} />
+          )}
         </div>
       }
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+
 
     </div>
   )
