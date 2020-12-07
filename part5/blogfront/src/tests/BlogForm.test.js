@@ -14,14 +14,12 @@ describe('<BlogForm />', () => {
   })
 
   test('<BlogForm updates parent state and calls onSubmit', () => {
-    // const mockHandler = jest.fn()
-    // const createButton = component.getByText('create')
+
     const form = component.container.querySelector('form')
     const title = component.container.querySelector('#title')
     const author = component.container.querySelector('#author')
     const url = component.container.querySelector('#url')
-    // fireEvent.click(createButton)
-    // expect(mockHandler.mock.calls).toHaveLength(1)
+
     fireEvent.change(title, {
       target: { value: 'test title' }
     })
