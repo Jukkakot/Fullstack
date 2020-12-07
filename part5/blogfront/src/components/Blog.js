@@ -30,7 +30,6 @@ const Blog = ({ blog, user, likeABlog, delBlog }) => {
       delBlog(blog)
     }
   }
-
   return (
     <div style={blogStyle} className='blog' >
       <div>
@@ -41,6 +40,7 @@ const Blog = ({ blog, user, likeABlog, delBlog }) => {
           <p>{blog.url} </p>
           <p>likes {blog.likes} <button onClick={handleLikeBlog}>like</button></p>
           <p>{blog.user ? blog.user.username : "null"} </p>
+          {/* {blog.user && user.username === blog.user.username ? <button onClick={handleDelBlog}>remove</button> : ""} */}
           {blog.user && user.username === blog.user.username ? <button onClick={handleDelBlog}>remove</button> : ""}
         </div> : <div />}
     </div>
