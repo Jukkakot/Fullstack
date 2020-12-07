@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-const Blog = ({ blog,user,likeABlog,delBlog }) => {
+const Blog = ({ blog, user, likeABlog, delBlog }) => {
   const [visible, setVisible] = useState(false)
   const [bText, setBText] = useState("View")
   const blogStyle = {
@@ -26,7 +26,7 @@ const Blog = ({ blog,user,likeABlog,delBlog }) => {
   const handleDelBlog = (event) => {
     event.preventDefault()
 
-    if(window.confirm("Remove "+blog.title+" by "+blog.author)){
+    if (window.confirm("Remove " + blog.title + " by " + blog.author)) {
       delBlog(blog)
     }
   }
@@ -41,8 +41,8 @@ const Blog = ({ blog,user,likeABlog,delBlog }) => {
           <p>{blog.url} </p>
           <p>likes {blog.likes} <button onClick={handleLikeBlog}>like</button></p>
           <p>{blog.user ? blog.user.username : "null"} </p>
-          {blog.user && user.username === blog.user.username ? <button onClick={handleDelBlog}>remove</button>: ""}
-        </div> :<div/>}
+          {blog.user && user.username === blog.user.username ? <button onClick={handleDelBlog}>remove</button> : ""}
+        </div> : <div />}
     </div>
   )
 }
