@@ -62,9 +62,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      // console.log(user)
-      // const userBlogs = await userService.getBlogs(user)
-      // setBlogs(userBlogs)
+      setNotificationMessage('login successful')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
     } catch (exception) {
       setNotificationMessage('wrong credentials')
       setTimeout(() => {
@@ -82,6 +83,7 @@ const App = () => {
       <div>
         username
         <input
+          id="username"
           type="text"
           value={username}
           name="Username"
@@ -91,6 +93,7 @@ const App = () => {
       <div>
         password
         <input
+          id="password"
           type="password"
           value={password}
           name="Password"
